@@ -9,6 +9,7 @@ public class CellCheckbox : MonoBehaviour
         _manager = GameObject.FindObjectOfType<InterfaceManager>();
     }
 
+    #region public Methods
     public static void SwitchLocalCheckboxOnClick(int index)
     {
         _manager.AllObjectsInInterface[index].IsChange = true;
@@ -19,4 +20,5 @@ public class CellCheckbox : MonoBehaviour
     {
         _manager.IsGlobalCheckboxesChange = true;
     }
+    #endregion
 }

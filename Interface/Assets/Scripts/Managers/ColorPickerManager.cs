@@ -1,17 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ColorPickerManager : MonoBehaviour
 {
+    #region private Members
     [SerializeField] private GameObject _colorPickerPanel;
     [SerializeField] private ColorPicker _colorPicker;
     [SerializeField] private RectTransform _panelForListOfElementsRT;
 
     private RectTransform _rt;
     private float _defaultPositionY;
+    #endregion
 
+    #region private Methods
     private void Start()
     {
         _rt = _colorPickerPanel.GetComponent<RectTransform>();
@@ -25,7 +26,9 @@ public class ColorPickerManager : MonoBehaviour
             _colorPickerPanel.SetActive(false);
         }
     }
+    #endregion
 
+    #region public Methods
     public void TurnOnColorPicker(Image buttonImageOnInterface, GameObject objectOnScene, float positionYOnRectTransform)
     {
         _colorPicker.SetButtonImageColorAndObjectColor(buttonImageOnInterface, objectOnScene);
@@ -36,4 +39,5 @@ public class ColorPickerManager : MonoBehaviour
 
         _colorPickerPanel.SetActive(true);
     }
+    #endregion
 }

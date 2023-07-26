@@ -9,6 +9,7 @@ public class CellEye : MonoBehaviour
         _manager = GameObject.FindObjectOfType<InterfaceManager>();
     }
 
+    #region public Methods
     public static void SwitchLocalEyeOnClick(int index)
     {
         _manager.AllObjectsInInterface[index].IsChange = true;
@@ -19,4 +20,5 @@ public class CellEye : MonoBehaviour
     {
         _manager.IsGlobalEyesChange = true;
     }
+    #endregion
 }

@@ -2,11 +2,14 @@ using UnityEngine;
 
 public class CreatePrefab : MonoBehaviour
 {
+    #region private Members
     [SerializeField] private GameObject _prefab;
     [SerializeField] private Transform _spawnZone;
     [SerializeField] private float _radiusOfSpawnZone;
     private InterfaceManager _interfaceManager;
+    #endregion
 
+    #region private Methods
     private void Start()
     {
         _interfaceManager = GameObject.FindObjectOfType<InterfaceManager>();
@@ -14,9 +17,14 @@ public class CreatePrefab : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.E))
+        UpdateInput();
+    }
+
+    private void UpdateInput()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            GameObject obj = Instantiate(_prefab, _spawnZone.position + new Vector3( Random.Range(-_radiusOfSpawnZone, _radiusOfSpawnZone), 5f,
+            GameObject obj = Instantiate(_prefab, _spawnZone.position + new Vector3(Random.Range(-_radiusOfSpawnZone, _radiusOfSpawnZone), 5f,
                 Random.Range(-_radiusOfSpawnZone, _radiusOfSpawnZone)), Quaternion.identity);
 
             Renderer rend = obj.GetComponent<Renderer>();
@@ -25,4 +33,5 @@ public class CreatePrefab : MonoBehaviour
             _interfaceManager.AddNewObjectToList(obj, color);
         }
     }
+    #endregion
 }

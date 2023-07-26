@@ -2,12 +2,20 @@ using UnityEngine;
 
 public class PauseMenuManager : MonoBehaviour
 {
+    #region private Members
     [SerializeField] private GameObject _pauseMenuPanel;
     [SerializeField] private GameObject _settingsPanel;
-    
+    #endregion
+
+    #region private Methods
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        UpdateInput();
+    }
+
+    private void UpdateInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (_pauseMenuPanel.activeSelf || _settingsPanel.activeSelf)
             {
@@ -20,7 +28,9 @@ public class PauseMenuManager : MonoBehaviour
             }
         }
     }
+    #endregion
 
+    #region public Methods
     public void ContinueOnCLick()
     {
         Time.timeScale = 1f;
@@ -38,4 +48,5 @@ public class PauseMenuManager : MonoBehaviour
     {
         Application.Quit();
     }
+    #endregion
 }

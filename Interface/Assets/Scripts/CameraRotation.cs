@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraRotation : MonoBehaviour
@@ -36,6 +34,11 @@ public class CameraRotation : MonoBehaviour
     }
 
     private void Update()
+    {
+        UpdateRotationAndPosition();
+    }
+
+    private void UpdateRotationAndPosition()
     {
         if (Input.GetAxis("Mouse ScrollWheel") > 0) _offset.z += ZoomSensitivity * Time.deltaTime;
         else if (Input.GetAxis("Mouse ScrollWheel") < 0) _offset.z -= ZoomSensitivity * Time.deltaTime;

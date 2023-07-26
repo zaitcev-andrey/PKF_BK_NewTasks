@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class SettingsManager : MonoBehaviour
 {
+    #region private Members
     [SerializeField] private GameObject _pauseMenuPanel;
     [SerializeField] private GameObject _settingsPanel;
 
@@ -13,7 +14,9 @@ public class SettingsManager : MonoBehaviour
     [SerializeField] private Slider _zoomSensitivitySlider;
 
     private CameraRotation _cameraRotation;
+    #endregion
 
+    #region private Methods
     private void Start()
     {
         _cameraRotation = FindObjectOfType<CameraRotation>();
@@ -28,10 +31,13 @@ public class SettingsManager : MonoBehaviour
         _cameraRotation.RotationVerticalSensitivity = _verticalSensitivitySlider.value;
         _cameraRotation.ZoomSensitivity = _zoomSensitivitySlider.value;
     }
+    #endregion
 
+    #region public Methods
     public void BackOnCLick()
     {
         _pauseMenuPanel.SetActive(true);
         _settingsPanel.SetActive(false);
     }
+    #endregion
 }

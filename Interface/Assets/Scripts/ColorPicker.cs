@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class ColorPicker : MonoBehaviour
 {
+    #region private Members
     private RectTransform _rect;
     private Texture2D _colorTexture;
 
@@ -12,7 +13,9 @@ public class ColorPicker : MonoBehaviour
     private bool _isReady = false;
     private bool _isColorSave = false;
     private Color _previousImageColor;
+    #endregion
 
+    #region private Methods
     private void Start()
     {
         _rect = GetComponent<RectTransform>();
@@ -81,13 +84,13 @@ public class ColorPicker : MonoBehaviour
         _isReady = false;
         _isColorSave = false;
     }
+    #endregion
 
+    #region public Methods
     public void SetButtonImageColorAndObjectColor(Image buttonImageOnInterface, GameObject objectOnScene)
     {
         _buttonImageOnInterface = buttonImageOnInterface;
         _objectOnScene = objectOnScene;
-        
-        //_colorPickerPanel.transform.position.y = 
     }
 
     public bool GetReadyStatus()
@@ -99,4 +102,5 @@ public class ColorPicker : MonoBehaviour
     {
         _isReady = true;
     }
+    #endregion
 }
