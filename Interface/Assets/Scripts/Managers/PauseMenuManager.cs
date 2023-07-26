@@ -3,12 +3,13 @@ using UnityEngine;
 public class PauseMenuManager : MonoBehaviour
 {
     [SerializeField] private GameObject _pauseMenuPanel;
+    [SerializeField] private GameObject _settingsPanel;
     
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            if (_pauseMenuPanel.activeSelf)
+            if (_pauseMenuPanel.activeSelf || _settingsPanel.activeSelf)
             {
                 ContinueOnCLick();
             }
@@ -24,6 +25,13 @@ public class PauseMenuManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         _pauseMenuPanel.SetActive(false);
+        _settingsPanel.SetActive(false);
+    }
+
+    public void SettingsOnCLick()
+    {
+        _pauseMenuPanel.SetActive(false);
+        _settingsPanel.SetActive(true);
     }
 
     public void ExitOnCLick()
