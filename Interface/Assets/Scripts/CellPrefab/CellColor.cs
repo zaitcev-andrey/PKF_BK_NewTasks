@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CellButtonOnClick : MonoBehaviour
+public class CellColor : MonoBehaviour
 {
     private static InterfaceManager _manager;
 
@@ -11,9 +11,8 @@ public class CellButtonOnClick : MonoBehaviour
         _manager = GameObject.FindObjectOfType<InterfaceManager>();
     }
 
-    public static void SelectGameObjectOnClick(int index)
+    public static void ChangeColorForObjectOnClick(int index)
     {
-        _manager.AllObjectsInInterface[index].IsChange = true;
-        _manager.AllObjectsInInterface[index].IsSelectObject = true;
+        _manager.OpenColorPickerPanelForObject(index);       
     }
 }

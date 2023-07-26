@@ -22,7 +22,7 @@ public class CreatePrefab : MonoBehaviour
             Renderer rend = obj.GetComponent<Renderer>();
             Color color = new Color((float)Random.Range(0, 255) / 255, (float)Random.Range(0, 255) / 255, (float)Random.Range(0, 255) / 255);
             rend.material.color = color;
-            _interfaceManager.AddNewObjectToList(obj);
+            _interfaceManager.AddNewObjectToList(obj, color);
         }
     }
 }

@@ -13,6 +13,7 @@ public class InterfaceManager : MonoBehaviour
     [SerializeField] private GameObject _listCellPrefab;
     [SerializeField] private GameObject _checkboxPrefab;
     [SerializeField] private GameObject _eyePrefab;
+    [SerializeField] private GameObject _colorPickerPrefab;
 
     [SerializeField] private GameObject _globalCheckbox;
     [SerializeField] private GameObject _globalEye;    
@@ -28,6 +29,7 @@ public class InterfaceManager : MonoBehaviour
     private int _turnOnCheckboxexCounter;
 
     private CameraRotation _cameraRotation;
+    private ColorPickerManager _colorPickerManager;
     #endregion
 
     #region public Members
@@ -40,6 +42,7 @@ public class InterfaceManager : MonoBehaviour
     private void Start()
     {
         _cameraRotation = FindObjectOfType<CameraRotation>();
+        _colorPickerManager = FindObjectOfType<ColorPickerManager>();
 
         _openedInterface.SetActive(true);
         _closedInterface.SetActive(false);
@@ -56,7 +59,8 @@ public class InterfaceManager : MonoBehaviour
 
         for (int i = 0; i < countOfElements; i++)
         {
-            AddElementOfListToInterface(i);
+            Color color = _allObjectsOnScene[i].GetComponent<Renderer>().material.color;
+            AddElementOfListToInterface(i, color);
         }       
     }
 
@@ -65,11 +69,14 @@ public class InterfaceManager : MonoBehaviour
         ApplyChanges();
     }
 
-    private void AddElementOfListToInterface(int index)
+    private void AddElementOfListToInterface(int index, Color color)
     {
         GameObject cell = Instantiate(_listCellPrefab, _panelForElementsTransform);
         GameObject checkBox = Instantiate(_checkboxPrefab, cell.transform);
         GameObject eye = Instantiate(_eyePrefab, cell.transform);
+
+        GameObject colorPicker = Instantiate(_colorPickerPrefab, cell.transform);
+        colorPicker.GetComponent<Image>().color = color;
 
         // об€зательно создаЄм копию, так как метод принимает значение по ссылке. ѕередава€ i, мы всегда
         // бы получали в качестве индекса размер нашего массива, что было бы ошибкой
@@ -77,8 +84,9 @@ public class InterfaceManager : MonoBehaviour
         cell.GetComponent<Button>().onClick.AddListener(() => CellButtonOnClick.SelectGameObjectOnClick(copy_i));
         checkBox.GetComponent<Button>().onClick.AddListener(() => CellCheckbox.SwitchLocalCheckboxOnClick(copy_i));
         eye.GetComponent<Button>().onClick.AddListener(() => CellEye.SwitchLocalEyeOnClick(copy_i));
+        colorPicker.GetComponent<Button>().onClick.AddListener(() => CellColor.ChangeColorForObjectOnClick(copy_i));
 
-        AllObjectsInInterface.Add(new CellComponents(checkBox, eye));
+        AllObjectsInInterface.Add(new CellComponents(cell, checkBox, eye, colorPicker));
     }
 
     /// <summary>
@@ -234,12 +242,19 @@ public class InterfaceManager : MonoBehaviour
         _closedInterface?.SetActive(false);
     }
 
-    public void AddNewObjectToList(GameObject obj)
+    public void AddNewObjectToList(GameObject obj, Color color)
     {        
         obj.tag = "ForInterface";
         _allObjectsOnScene.Add(obj);        
 
-        AddElementOfListToInterface(countOfElements++);
+        AddElementOfListToInterface(countOfElements++, color);
+    }
+
+    public void OpenColorPickerPanelForObject(int index)
+    {
+        Image buttonImage = AllObjectsInInterface[index].ColorPickerPrefab.GetComponent<Image>();
+        float positionYOnRectTransform = AllObjectsInInterface[index].Cell.GetComponent<RectTransform>().anchoredPosition.y;
+        _colorPickerManager.TurnOnColorPicker(buttonImage, _allObjectsOnScene[index], positionYOnRectTransform);
     }
 
     public void SetCameraDefaultTargetOnClick()
@@ -252,8 +267,10 @@ public class InterfaceManager : MonoBehaviour
     //  ласс, хран€щий все внутренние префабы €чейки из списка элементов интерфейса
     public class CellComponents
     {
+        public GameObject Cell;
         public GameObject CheckboxPrefab;
         public GameObject EyePrefab;
+        public GameObject ColorPickerPrefab;
 
         public bool IsChange = false;
         public bool IsSelectObject = false;
@@ -264,10 +281,12 @@ public class InterfaceManager : MonoBehaviour
         public int CurrentOpacity = 100;
         public int NewOpacity = 100;
 
-        public CellComponents(GameObject checkboxPrefab, GameObject eyePrefab)
+        public CellComponents(GameObject cell, GameObject checkboxPrefab, GameObject eyePrefab, GameObject colorPickerPrefab)
         {
+            Cell = cell;
             CheckboxPrefab = checkboxPrefab;
             EyePrefab = eyePrefab;
+            ColorPickerPrefab = colorPickerPrefab;
         }
     }
     #endregion
