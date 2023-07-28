@@ -96,14 +96,18 @@
                 </ListBox>
             </StackPanel>
         </ScrollViewer>
+
+
+        <Border Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" BorderThickness="1" BorderBrush="Black" Margin="5">
+            <ScrollViewer>
+                <TextBlock x:Name="selectedTest" Text=""/>
+            </ScrollViewer>
+        </Border>
         
 
-        <TextBlock Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" x:Name="selectedTest" Text="">
-            
-        </TextBlock>
-
         <Button x:Name="SendTestButton" Grid.Row="2" Grid.ColumnSpan="2" Content="Отправить тест клиенту" Click="SendTestButton_Click"/>
-        <TextBlock Grid.Row="3" Grid.ColumnSpan="2" x:Name="logAboutSending" Text="Вы отправили тест"/>
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="2" x:Name="logAboutSending"
+                   DataContext = "{Binding ServerVM.Model}"  Text="{Binding Path=MessageAboutSendingTest}"/>
 
         <TextBox Grid.Row="4" Grid.ColumnSpan="3" x:Name="clientsResults" IsReadOnly="True"
                  DataContext = "{Binding ServerVM.Model}"  Text="{Binding Path=LogWithResults}"/>

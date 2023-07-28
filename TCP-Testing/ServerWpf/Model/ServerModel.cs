@@ -26,6 +26,7 @@ namespace ServerWpf.Model
         private List<Client> _clientModels;
         private StringBuilder _allClientsResults;
         private string _logWithResults;
+        private string _messageAboutSendingTest;
 
         #endregion
 
@@ -71,6 +72,16 @@ namespace ServerWpf.Model
             {
                 _logWithResults = value;
                 OnPropertyChanged("LogWithResults");
+            }
+        }
+
+        public string MessageAboutSendingTest
+        {
+            get { return _messageAboutSendingTest; }
+            set
+            {
+                _messageAboutSendingTest = value;
+                OnPropertyChanged("MessageAboutSendingTest");
             }
         }
 
@@ -157,20 +168,15 @@ namespace ServerWpf.Model
                     clientAnswer = Encoding.UTF8.GetString(clientData, 0, receivedByteLen);
                     // здесь проверяем результат относительно пройденного теста
                     TestData data = _testDataForClientMap[_ip_IndexMap[clientSocket.RemoteEndPoint]];
-                    bool result = testModel.GetResultForTest(clientAnswer, data);
-                    int valueResult = result ? 100 : 0;
+                    int result = testModel.GetResultForTest(clientAnswer, data);
                     _allClientsResults.AppendLine($"Пользователь {userName} прошёл тест {TestTypesNameString.GetNameByType(data.Type)} " +
-                        $"под номером {data.Index} с результатом {valueResult} процентов");
+                        $"под номером {data.Index} с результатом {result} процентов");
                     LogWithResults = _allClientsResults.ToString();                    
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // !!! переписать. Сделать переменную строки, которая выводится в лог в view. А так же теперь broadcast будет отправлять тест именно нашему клиенту, а не всем остальным
-
-                //if (ex.Message == "Удаленный хост принудительно разорвал существующее подключение")
-                //    Console.WriteLine($"{userName} вышел из чата");
-                //else Console.WriteLine(ex.Message);
+                throw;
             }
             finally
             {
@@ -188,21 +194,14 @@ namespace ServerWpf.Model
                     {
                         var messageBytes = Encoding.UTF8.GetBytes(_selectedTest);
                         _selectedClientIndex = -1;
+                        MessageAboutSendingTest = $"Вы отправили тест пользователю {clientIndex}";
                         clientSocket.Send(messageBytes);
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // !!! переписать. Сделать переменную строки, которая выводится в лог в view. А так же теперь broadcast будет отправлять тест именно нашему клиенту, а не всем остальным
-
-                //if (ex.Message == "Удаленный хост принудительно разорвал существующее подключение")
-                //    Console.WriteLine($"{userName} вышел из чата");
-                //else Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                RemoveConnection(clientSocket.RemoteEndPoint);
+                throw;
             }
             
         }
@@ -228,6 +227,11 @@ namespace ServerWpf.Model
                 clients.Remove(removedClient);
 
             removedClient?.Close();
+
+            List<Client> tmp = new List<Client>(ClientModels);
+            Client client = ClientModels.FirstOrDefault(cl => cl.Index == _ip_IndexMap[id]);
+            tmp.Remove(client);
+            ClientModels = tmp;
         }
         #endregion
     }

@@ -18,9 +18,11 @@ namespace ServerWpf.Model
         public string Answer2 { get; }
         public string Answer3 { get; }
         public string Answer4 { get; }
-        public int TrueAnswer { get; }
+        public string Answer5 { get; }
+        public string Answer6 { get; }
+        public string TrueAnswer { get; }
 
-        public MultipleChoiceTest(string _question, string _answer1, string _answer2, string _answer3, string _answer4, int _trueAnswer) 
+        public MultipleChoiceTest(string _question, string _answer1, string _answer2, string _answer3, string _answer4, string _answer5, string _answer6, string _trueAnswer) 
         {
             Type = TestTypes.MultipleChoiceTest;
             TestTypeString = TestTypesNameString.GetNameByType(Type);
@@ -33,6 +35,8 @@ namespace ServerWpf.Model
             Answer2 = _answer2;
             Answer3 = _answer3;
             Answer4 = _answer4;
+            Answer5 = _answer5;
+            Answer6 = _answer6;
             TrueAnswer = _trueAnswer;
         }
     }
