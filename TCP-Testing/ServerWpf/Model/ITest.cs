@@ -10,6 +10,6 @@ namespace ServerWpf.Model
     {
         string TestTypeString { get; }
 
-        TestTypesEnum Type { get; }
+        TestTypes Type { get; }
     }
 }

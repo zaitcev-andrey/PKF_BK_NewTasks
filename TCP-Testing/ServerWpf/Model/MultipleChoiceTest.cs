@@ -9,7 +9,7 @@ namespace ServerWpf.Model
     internal class MultipleChoiceTest : ITest
     {
         public string TestTypeString { get; }
-        public TestTypesEnum Type { get; }
+        public TestTypes Type { get; }
 
         private static int _globalIndex = 0;
         public int Index { get; }
@@ -22,8 +22,8 @@ namespace ServerWpf.Model
 
         public MultipleChoiceTest(string _question, string _answer1, string _answer2, string _answer3, string _answer4, int _trueAnswer) 
         {
-            TestTypeString = "MultipleChoiceTest";
-            Type = TestTypesEnum.MultipleChoiceTest;
+            Type = TestTypes.MultipleChoiceTest;
+            TestTypeString = TestTypesNameString.GetNameByType(Type);
 
             _globalIndex++;
             Index = _globalIndex;

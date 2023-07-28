@@ -9,22 +9,30 @@ namespace ServerWpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        private AllTestsViewModel testsViewModel;
+        private AllTestsAndServerViewModel _testsAndServerViewModel;
         public MainWindow()
         {
             InitializeComponent();
 
-            testsViewModel = new AllTestsViewModel();
+            _testsAndServerViewModel = new AllTestsAndServerViewModel();
 
-            DataContext = testsViewModel;
+            _testsAndServerViewModel.LoadServerListen();
+
+            DataContext = _testsAndServerViewModel;
         }
 
         private void testsList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {            
-            string data = testsViewModel.GetTestByIndex(testsList.SelectedItem);
+        {
+            string data = _testsAndServerViewModel.GetTestByIndex(testsList.SelectedItem);
             selectedTest.Text = data;
         }
 
-        
+        private void SendTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(clientsList.SelectedItem != null && testsList.SelectedItem != null)
+            {
+                _testsAndServerViewModel.SendTestToCLient(clientsList.SelectedItem, testsList.SelectedItem);
+            }
+        }
     }
 }

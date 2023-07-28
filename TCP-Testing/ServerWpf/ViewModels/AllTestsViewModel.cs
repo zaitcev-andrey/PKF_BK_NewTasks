@@ -19,7 +19,7 @@ namespace ServerWpf.ViewModels
 
         public AllTestsModel Model { get { return _model; } }
 
-        public string GetTestByIndex(object selectedItem)
+        public TestData GetTestBySelectedTest(object selectedItem)
         {
             return Model.GetTestData(selectedItem);
         }

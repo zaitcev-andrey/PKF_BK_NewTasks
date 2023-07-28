@@ -24,6 +24,9 @@ namespace ServerWpf.Model
         private string _answer3_MCT2 = "ответ32";
         private string _answer4_MCT2 = "ответ42";
         private int _trueAnswer_MCT2 = 2;
+
+
+        private List<int> _answersForMultipleChoiceTests;
         #endregion
 
         public List<MultipleChoiceTest> AllMultipleChoiceTests { get; set; }
@@ -37,23 +40,44 @@ namespace ServerWpf.Model
             MultipleChoiceTest mctTest2 = new MultipleChoiceTest(_question1_MCT2, _answer1_MCT2, _answer2_MCT2, _answer3_MCT2, _answer4_MCT2, _trueAnswer_MCT2);
             AllMultipleChoiceTests.Add(mctTest1);
             AllMultipleChoiceTests.Add(mctTest2);
+
+            _answersForMultipleChoiceTests = new List<int>
+            {
+                _trueAnswer_MCT1,
+                _trueAnswer_MCT2
+            };
         }
 
-        public string GetTestData(object selectedItem)
+        public TestData GetTestData(object selectedTest)
         {
-            ITest tmpTest = selectedItem as ITest;
-            StringBuilder result = new StringBuilder();
-            if(tmpTest.Type == TestTypesEnum.MultipleChoiceTest)
+            ITest tmpTest = selectedTest as ITest;
+            StringBuilder testString = new StringBuilder();
+            TestData result = null;
+            if (tmpTest.Type == TestTypes.MultipleChoiceTest)
             {
-                MultipleChoiceTest test = selectedItem as MultipleChoiceTest;
-                result.AppendLine($"На следующий вопрос вам нужно дать единственный ответ. Напишите цифру ответа");
-                result.AppendLine($"Вопрос: {test.Question}");
-                result.AppendLine($"Ответ 1: {test.Answer1}");
-                result.AppendLine($"Ответ 2: {test.Answer2}");
-                result.AppendLine($"Ответ 3: {test.Answer3}");
-                result.AppendLine($"Ответ 4: {test.Answer4}");
+                MultipleChoiceTest test = selectedTest as MultipleChoiceTest;
+                testString.AppendLine($"На следующий вопрос вам нужно дать единственный ответ. Напишите цифру ответа");
+                testString.AppendLine($"Вопрос: {test.Question}");
+                testString.AppendLine($"Ответ 1: {test.Answer1}");
+                testString.AppendLine($"Ответ 2: {test.Answer2}");
+                testString.AppendLine($"Ответ 3: {test.Answer3}");
+                testString.AppendLine($"Ответ 4: {test.Answer4}");
+
+                result = new TestData(testString.ToString(), TestTypes.MultipleChoiceTest, test.Index);
             }
-            return result.ToString();
+            return result;
+        }
+
+        public bool GetResultForTest(string answer, TestData data)
+        {
+            answer = answer.Trim();
+            bool result = false;
+            if(data.Type == TestTypes.MultipleChoiceTest)
+            {
+                if (_answersForMultipleChoiceTests[data.Index - 1] == int.Parse(answer))
+                    result = true;
+            }
+            return result;
         }
     }
 }

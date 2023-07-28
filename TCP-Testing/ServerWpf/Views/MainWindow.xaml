@@ -59,13 +59,27 @@
         <TextBlock Grid.Column="1" Text="Все тесты"/>
         <TextBlock Grid.Column="2" Text="Выбранный тест"/>
 
-        <ListBox Grid.Row="1" x:Name="clientsList">
-            <ListBoxItem>Huawei Nexus 5P</ListBoxItem>
-            <ListBoxItem>Huawei Nexus 6P</ListBoxItem>
-        </ListBox>
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Orientation="Vertical" DataContext="{Binding ServerVM.Model}">
+                <ListBox x:Name="clientsList" ItemsSource="{Binding ClientModels}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="16"/>
+                                    <RowDefinition Height="16"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="1" Text="{Binding Path=Index}"/>
+                                <TextBlock Grid.Row="0" Text="{Binding Path=Name}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </ScrollViewer>
 
         <ScrollViewer Grid.Row="1" Grid.Column="1">
-            <StackPanel Orientation="Vertical" DataContext="{Binding Model}">
+            <StackPanel Orientation="Vertical" DataContext="{Binding AllTestsVM.Model}">
                 <ListBox x:Name="testsList" ItemsSource="{Binding AllMultipleChoiceTests}" SelectionChanged="testsList_SelectionChanged">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -74,8 +88,8 @@
                                     <RowDefinition Height="16"/>
                                     <RowDefinition Height="16"/>
                                 </Grid.RowDefinitions>
-                                <TextBlock Grid.Row="0" Text="{Binding Path=TestTypeString}"/>
                                 <TextBlock Grid.Row="1" Text="{Binding Path=Index}"/>
+                                <TextBlock Grid.Row="0" Text="{Binding Path=TestTypeString}"/>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -88,10 +102,11 @@
             
         </TextBlock>
 
-        <Button x:Name="SendTestButton" Grid.Row="2" Grid.ColumnSpan="2" Content="Отправить тест клиенту"/>
+        <Button x:Name="SendTestButton" Grid.Row="2" Grid.ColumnSpan="2" Content="Отправить тест клиенту" Click="SendTestButton_Click"/>
         <TextBlock Grid.Row="3" Grid.ColumnSpan="2" x:Name="logAboutSending" Text="Вы отправили тест"/>
 
-        <TextBlock Grid.Row="4" Grid.ColumnSpan="3" x:Name="clientsResults" Text="Результаты клиентов"/>
+        <TextBox Grid.Row="4" Grid.ColumnSpan="3" x:Name="clientsResults" IsReadOnly="True"
+                 DataContext = "{Binding ServerVM.Model}"  Text="{Binding Path=LogWithResults}"/>
         
     </Grid>
 </Window>
