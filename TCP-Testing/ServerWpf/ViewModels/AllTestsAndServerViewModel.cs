@@ -1,17 +1,13 @@
-﻿using ServerWpf.Commands;
-using ServerWpf.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ServerWpf.Model;
 
 namespace ServerWpf.ViewModels
 {
     internal class AllTestsAndServerViewModel
     {
+        #region private Members
         private AllTestsViewModel _allTestsVM;
         private ServerViewModel _serverVM;
+        #endregion
 
         public AllTestsAndServerViewModel()
         {
@@ -19,9 +15,12 @@ namespace ServerWpf.ViewModels
             _serverVM = new ServerViewModel();
         }
 
+        #region public Properties
         public AllTestsViewModel AllTestsVM { get { return _allTestsVM; } }
         public ServerViewModel ServerVM { get { return _serverVM; } }
+        #endregion
 
+        #region public Methods
         public void LoadServerListen()
         {
             _serverVM.LoadServerListen();
@@ -38,5 +37,6 @@ namespace ServerWpf.ViewModels
             TestData testData = _allTestsVM.GetTestBySelectedTest(selectedTest);
             _serverVM.SendTestToClient(selectedClient, testData);
         }
+        #endregion
     }
 }

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net.Sockets;
-using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -126,7 +122,7 @@ namespace ClientWpf.Models
                     return;
                 }
 
-                // после выполнения Connect сервер принимает клиента методом AcceptAsync()
+                // после выполнения метода Connect сервер принимает клиента методом AcceptAsync()
                 _clientSocket.Connect(Host, Port);
 
                 ConnectAndErrorLog = "Вы присоединились к серверу";
@@ -155,7 +151,7 @@ namespace ClientWpf.Models
 
         #region private Methods
         /// <summary>
-        /// Метод для отправки сообщения на сервер
+        /// Метод для отправки ответа на сервер
         /// </summary>
         /// <returns></returns>
         private async Task SendAnswersAsync()
@@ -180,7 +176,7 @@ namespace ClientWpf.Models
         }
 
         /// <summary>
-        /// Метод для получения данных от сервера
+        /// Метод для получения теста от сервера
         /// </summary>
         /// <returns></returns>
         private async Task ReceiveTestAsync()
@@ -188,7 +184,7 @@ namespace ClientWpf.Models
             while (true)
             {
                 await Task.Delay(10);
-                var clientData = new byte[1024 * 10000]; // до 10мб
+                var clientData = new byte[1024 * 1000];
                 int receivedByteLen = _clientSocket.Receive(clientData);
 
                 StringWithTest = Encoding.UTF8.GetString(clientData, 0, receivedByteLen);

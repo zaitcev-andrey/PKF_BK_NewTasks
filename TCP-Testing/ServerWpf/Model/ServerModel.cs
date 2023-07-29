@@ -14,14 +14,14 @@ namespace ServerWpf.Model
         
         private Socket serverSocket; // серверный сокет для прослушивания        
         private List<Socket> clients; // список всех клиентских сокетов
-        private Dictionary<EndPoint, int> _ip_IndexMap; // нужен для того, чтобы понимали от какого клиента получили ответ
-        private Dictionary<int, TestData> _testDataForClientMap;
+        private Dictionary<EndPoint, int> _ip_IndexMap; // словарь для соответсвия ip клиента с его индексом в списке клиентов
+        private Dictionary<int, TestData> _testDataForClientMap; // словарь для соответствия индекса клиента с тестом, который ему отправлен
 
-        private AllTestsModel testModel;
+        private AllTestsModel testModel; // для получения результата по пройденному тесту
 
         private string _selectedTest;
         private int _selectedClientIndex;
-        private int _lastClientIndex;
+        private int _lastClientIndex; // хранит индекс последнего подключенного клиента
 
         private List<Client> _clientModels;
         private StringBuilder _allClientsResults;
@@ -97,7 +97,6 @@ namespace ServerWpf.Model
             try
             {
                 serverSocket.Listen(1000);
-                //Console.WriteLine("Сервер запущен, ожидается подключение клиентов...");
 
                 while (true)
                 {
@@ -110,8 +109,8 @@ namespace ServerWpf.Model
                     AddNewClientModel(clientSocket, userName);
 
                     clients.Add(clientSocket);
-                    Task.Run(() => GetMessageFromClientAsync(clientSocket, userName));
-                    Task.Run(() => SendMessageToClientAsync(clientSocket, _lastClientIndex));
+                    Task.Run(() => GetTestAnswerFromClientAsync(clientSocket, userName));
+                    Task.Run(() => SendTestToClientAsync(clientSocket, _lastClientIndex));
                 }
             }
             catch (Exception ex)
@@ -124,6 +123,12 @@ namespace ServerWpf.Model
             }
         }
 
+        /// <summary>
+        /// Этот метод определяет клиента, которому будет отправляться тест. После этого метода, когда клиент уже 
+        /// известен, начнёт выполняться основной метод на отправку теста клиенту.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="data"></param>
         public void SendTestToClient(Client client, TestData data)
         {
             _selectedTest = data.TestString;
@@ -150,25 +155,26 @@ namespace ServerWpf.Model
 
         #region private Methods
         /// <summary>
-        /// Метод для получения данных от клиента и рассылки этих данных всем остальным клиентам 
-        /// кроме того, от которого данные были получены
+        /// Метод для получения данных (ответа на тест) от клиента
         /// </summary>
         /// <param name="clientSocket"></param>
         /// <returns></returns>
-        private async Task GetMessageFromClientAsync(Socket clientSocket, string userName)
+        private async Task GetTestAnswerFromClientAsync(Socket clientSocket, string userName)
         {
             try
             {
                 string clientAnswer = "";
                 while (true)
                 {
-                    var clientData = new byte[1024 * 10000]; // до 10мб
+                    var clientData = new byte[1024 * 1000];
                     int receivedByteLen = clientSocket.Receive(clientData);
 
                     clientAnswer = Encoding.UTF8.GetString(clientData, 0, receivedByteLen);
-                    // здесь проверяем результат относительно пройденного теста
+
+                    // здесь получаем результат относительно пройденного теста
                     TestData data = _testDataForClientMap[_ip_IndexMap[clientSocket.RemoteEndPoint]];
                     int result = testModel.GetResultForTest(clientAnswer, data);
+
                     _allClientsResults.AppendLine($"Пользователь {userName} прошёл тест {TestTypesNameString.GetNameByType(data.Type)} " +
                         $"под номером {data.Index} с результатом {result} процентов");
                     LogWithResults = _allClientsResults.ToString();                    
@@ -184,12 +190,19 @@ namespace ServerWpf.Model
             }
         }
 
-        private async Task SendMessageToClientAsync(Socket clientSocket, int clientIndex)
+        /// <summary>
+        /// Метод для отправки теста клиенту
+        /// </summary>
+        /// <param name="clientSocket"></param>
+        /// <param name="clientIndex"></param>
+        /// <returns></returns>
+        private async Task SendTestToClientAsync(Socket clientSocket, int clientIndex)
         {
             try
             {
                 while (true)
                 {
+                    await Task.Delay(10);
                     if (clientIndex == _selectedClientIndex)
                     {
                         var messageBytes = Encoding.UTF8.GetBytes(_selectedTest);
@@ -206,6 +219,11 @@ namespace ServerWpf.Model
             
         }
 
+        /// <summary>
+        /// Метод для добавления нового клиента к списку клиентов
+        /// </summary>
+        /// <param name="socket"></param>
+        /// <param name="userName"></param>
         private void AddNewClientModel(Socket socket, string userName)
         {
             List<Client> tmp = new List<Client>(ClientModels);

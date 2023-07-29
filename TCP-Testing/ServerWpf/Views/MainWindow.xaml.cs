@@ -21,6 +21,7 @@ namespace ServerWpf
             DataContext = _testsAndServerViewModel;
         }
 
+        #region private Methods
         private void multipleChoiceTestsList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             selectedTestType = 1;
@@ -45,5 +46,6 @@ namespace ServerWpf
                     _testsAndServerViewModel.SendTestToCLient(clientsList.SelectedItem, sequenceTestsList.SelectedItem);
             }
         }
+        #endregion
     }
 }

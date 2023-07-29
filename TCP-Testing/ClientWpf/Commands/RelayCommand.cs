@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace ClientWpf.Commands
 {
+    /// <summary>
+    /// Класс, реализующий функционал команд, которые используются для кнопок во View
+    /// </summary>
     internal class RelayCommand : ICommand
     {
         private Action<object> execute;

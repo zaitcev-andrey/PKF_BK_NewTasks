@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using ServerWpf.Model;
 
@@ -20,10 +15,10 @@ namespace ServerWpf.ViewModels
 
         public ServerModel Model { get { return _model; } }
 
+        #region public Methods
         public void LoadServerListen()
         {
             Task.Run(() => _model.ListenAsync());
-            //await _model.ListenAsync();
         }
 
         public void SendTestToClient(object selectedClient, TestData data)
@@ -31,5 +26,6 @@ namespace ServerWpf.ViewModels
             Client client = selectedClient as Client;
             _model.SendTestToClient(client, data);
         }
+        #endregion
     }
 }

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ServerWpf.Model
+﻿namespace ServerWpf.Model
 {
+    /// <summary>
+    /// Интерфейс для всех тестов
+    /// </summary>
     internal interface ITest
     {
         string TestTypeString { get; }

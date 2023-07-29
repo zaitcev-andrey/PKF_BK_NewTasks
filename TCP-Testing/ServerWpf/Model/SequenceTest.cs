@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ServerWpf.Model
+﻿namespace ServerWpf.Model
 {
+    /// <summary>
+    /// Класс, описывающий тест на выбор последовательности действий
+    /// </summary>
     internal class SequenceTest : ITest
     {
         public string TestTypeString { get; }

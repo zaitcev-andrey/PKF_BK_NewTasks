@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ServerWpf.Model
 {
+    /// <summary>
+    /// Класс, хранящий данные о тестах всех видов (вопросы, варианты ответов и сами ответы)
+    /// </summary>
     internal class AllTestsModel
     {
         #region MeltipleChoiceTests
@@ -58,8 +59,10 @@ namespace ServerWpf.Model
         #endregion
         #endregion
 
+        #region public Properties
         public List<MultipleChoiceTest> AllMultipleChoiceTests { get; set; }
         public List<SequenceTest> AllSequenceChoiceTests { get; set; }
+        #endregion
 
         public AllTestsModel()
         {
@@ -91,6 +94,7 @@ namespace ServerWpf.Model
             };
         }
 
+        #region public Methods
         public TestData GetTestData(object selectedTest)
         {
             ITest tmpTest = selectedTest as ITest;
@@ -167,5 +171,6 @@ namespace ServerWpf.Model
             }
             return result;
         }
+        #endregion
     }
 }

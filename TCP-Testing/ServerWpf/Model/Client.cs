@@ -1,32 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ServerWpf.Model
 {
+    /// <summary>
+    /// Класс, описывающий клиента
+    /// </summary>
     internal class Client
     {
         private static int _globalIndex = 0;
 
+        #region public Properties
         public string Name { get; set; }
         public int Index { get; set; }
-
-        public List<string> TestResults { get; set; }
-        public string LastTestResult { get; set; }
+        #endregion
 
         public Client(string _name) 
         {
             Name = _name;
             _globalIndex++;
             Index = _globalIndex;
-        }
-
-        public void AddTestResult(string testResult)
-        {
-            TestResults.Add(testResult);
-            LastTestResult = testResult;
         }
     }
 }

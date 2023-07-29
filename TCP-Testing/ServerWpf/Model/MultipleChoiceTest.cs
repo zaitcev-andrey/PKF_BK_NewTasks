@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ServerWpf.Model
+﻿namespace ServerWpf.Model
 {
+    /// <summary>
+    /// Класс, описывающий тест на множественный выбор
+    /// </summary>
     internal class MultipleChoiceTest : ITest
     {
         public string TestTypeString { get; }
@@ -22,7 +19,8 @@ namespace ServerWpf.Model
         public string Answer6 { get; }
         public string TrueAnswer { get; }
 
-        public MultipleChoiceTest(string _question, string _answer1, string _answer2, string _answer3, string _answer4, string _answer5, string _answer6, string _trueAnswer) 
+        public MultipleChoiceTest(string _question, string _answer1, string _answer2, string _answer3, string _answer4,
+            string _answer5, string _answer6, string _trueAnswer) 
         {
             Type = TestTypes.MultipleChoiceTest;
             TestTypeString = TestTypesNameString.GetNameByType(Type);
