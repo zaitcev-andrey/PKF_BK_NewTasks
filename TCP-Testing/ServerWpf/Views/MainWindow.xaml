@@ -80,7 +80,22 @@
 
         <ScrollViewer Grid.Row="1" Grid.Column="1">
             <StackPanel Orientation="Vertical" DataContext="{Binding AllTestsVM.Model}">
-                <ListBox x:Name="testsList" ItemsSource="{Binding AllMultipleChoiceTests}" SelectionChanged="testsList_SelectionChanged">
+                <ListBox x:Name="multipleChoiceTestsList" ItemsSource="{Binding AllMultipleChoiceTests}" SelectionChanged="multipleChoiceTestsList_SelectionChanged">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="16"/>
+                                    <RowDefinition Height="16"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="1" Text="{Binding Path=Index}"/>
+                                <TextBlock Grid.Row="0" Text="{Binding Path=TestTypeString}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <ListBox x:Name="sequenceTestsList" ItemsSource="{Binding AllSequenceChoiceTests}" SelectionChanged="sequenceTestsList_SelectionChanged">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>

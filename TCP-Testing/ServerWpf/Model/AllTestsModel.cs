@@ -8,6 +8,7 @@ namespace ServerWpf.Model
 {
     internal class AllTestsModel
     {
+        #region MeltipleChoiceTests
         #region MultipleChoiceTest1
         private string _question1_MCT1 = "Какие цвета есть на флаге России?";
         private string _answer1_MCT1 = "1) Жёлтый";
@@ -32,9 +33,33 @@ namespace ServerWpf.Model
 
         private List<string> _answersForMultipleChoiceTests;
         #endregion
+        #endregion
+
+        #region SequenceTests
+        #region SequenceTest1
+        private string _question1_S1 = "Перечислите действия при пожаре?";
+        private string _action1_S1 = "1) Быстро собрать ценные вещи";
+        private string _action2_S1 = "2) Эвакуация";
+        private string _action3_S1 = "3) Вызвать пожарных";
+        private string _action4_S1 = "4) Сохранять спокойствие";
+        private string _trueActions_S1 = "4,3,1,2";
+        #endregion
+
+        #region SequenceTest2
+        private string _question1_S2 = "Перечислите действия при наводнении?";
+        private string _action1_S2 = "1) Собрать необходимые документы, ценности";
+        private string _action2_S2 = "2) До прибытия помощи оставаться на верхних этажах";
+        private string _action3_S2 = "3) Сохранять спокойствие, не паниковать";
+        private string _action4_S2 = "4) По возможности оставить зону затопления";
+        private string _trueActions_S2 = "3,1,4,2";
+
+
+        private List<string> _answersForSequenceChoiceTests;
+        #endregion
+        #endregion
 
         public List<MultipleChoiceTest> AllMultipleChoiceTests { get; set; }
-        //public List<MultipleChoiceTest> AllMultipleChoiceTests { get; set; }
+        public List<SequenceTest> AllSequenceChoiceTests { get; set; }
 
         public AllTestsModel()
         {
@@ -51,6 +76,18 @@ namespace ServerWpf.Model
             {
                 _trueAnswer_MCT1,
                 _trueAnswer_MCT2
+            };
+
+            AllSequenceChoiceTests = new List<SequenceTest>();
+            SequenceTest sTest1 = new SequenceTest(_question1_S1, _action1_S1, _action2_S1, _action3_S1, _action4_S1, _trueActions_S1);
+            SequenceTest sTest2 = new SequenceTest(_question1_S2, _action1_S2, _action2_S2, _action3_S2, _action4_S2, _trueActions_S2);
+            AllSequenceChoiceTests.Add(sTest1);
+            AllSequenceChoiceTests.Add(sTest2);
+
+            _answersForSequenceChoiceTests = new List<string>
+            {
+                _trueActions_S1,
+                _trueActions_S2
             };
         }
 
@@ -72,6 +109,18 @@ namespace ServerWpf.Model
                 testString.AppendLine($"{test.Answer6}");
 
                 result = new TestData(testString.ToString(), TestTypes.MultipleChoiceTest, test.Index);
+            }
+            else if(tmpTest.Type == TestTypes.Sequence)
+            {
+                SequenceTest test = selectedTest as SequenceTest;
+                testString.AppendLine($"Перечислите через запятую порядок действий в следующем вопросе");
+                testString.AppendLine($"Вопрос: {test.Question}");
+                testString.AppendLine($"{test.Action1}");
+                testString.AppendLine($"{test.Action2}");
+                testString.AppendLine($"{test.Action3}");
+                testString.AppendLine($"{test.Action4}");
+
+                result = new TestData(testString.ToString(), TestTypes.Sequence, test.Index);
             }
             return result;
         }
@@ -102,6 +151,19 @@ namespace ServerWpf.Model
                     result = 0;
                 else
                     result = (int)(countOfTrueAnswer / len * 100);
+            }
+            else if(data.Type == TestTypes.Sequence)
+            {
+                string[] answers = answer.Trim().Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] realAnswer = _answersForSequenceChoiceTests[data.Index - 1].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                int len = realAnswer.Length;
+                float countOfTrueAnswer = 0;
+                for(int i = 0; i < realAnswer.Length && i < answers.Length; i++)
+                {
+                    if (realAnswer[i] == answers[i])
+                        countOfTrueAnswer++;
+                }
+                result = (int)(countOfTrueAnswer / len * 100);
             }
             return result;
         }

@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-
 using ServerWpf.ViewModels;
 
 namespace ServerWpf
@@ -10,6 +9,7 @@ namespace ServerWpf
     public partial class MainWindow : Window
     {
         private AllTestsAndServerViewModel _testsAndServerViewModel;
+        private int selectedTestType = 1;
         public MainWindow()
         {
             InitializeComponent();
@@ -21,17 +21,28 @@ namespace ServerWpf
             DataContext = _testsAndServerViewModel;
         }
 
-        private void testsList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void multipleChoiceTestsList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            string data = _testsAndServerViewModel.GetTestByIndex(testsList.SelectedItem);
+            selectedTestType = 1;
+            string data = _testsAndServerViewModel.GetTestByIndex(multipleChoiceTestsList.SelectedItem);
+            selectedTest.Text = data;
+        }       
+
+        private void sequenceTestsList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            selectedTestType = 2;
+            string data = _testsAndServerViewModel.GetTestByIndex(sequenceTestsList.SelectedItem);
             selectedTest.Text = data;
         }
 
         private void SendTestButton_Click(object sender, RoutedEventArgs e)
         {
-            if(clientsList.SelectedItem != null && testsList.SelectedItem != null)
+            if (clientsList.SelectedItem != null)
             {
-                _testsAndServerViewModel.SendTestToCLient(clientsList.SelectedItem, testsList.SelectedItem);
+                if (multipleChoiceTestsList.SelectedItem != null && selectedTestType == 1)
+                    _testsAndServerViewModel.SendTestToCLient(clientsList.SelectedItem, multipleChoiceTestsList.SelectedItem);
+                else if(sequenceTestsList.SelectedItem != null && selectedTestType == 2)
+                    _testsAndServerViewModel.SendTestToCLient(clientsList.SelectedItem, sequenceTestsList.SelectedItem);
             }
         }
     }

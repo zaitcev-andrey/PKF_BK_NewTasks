@@ -56,6 +56,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\BaseModel.cs" />
+    <Compile Include="Model\SequenceTest.cs" />
     <Compile Include="Model\ServerModel.cs" />
     <Compile Include="Model\TestData.cs" />
     <Compile Include="ViewModels\AllTestsAndServerViewModel.cs" />
